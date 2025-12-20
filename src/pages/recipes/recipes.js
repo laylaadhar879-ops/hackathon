@@ -1,5 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '../../styles/global.css'
 import './style.css'
+import { insertNavbar } from '../../components/navbar/navbar.js'
+
+// Insert the navbar at the top of the page
+insertNavbar('recipes')
 
 // Fetch and display recipes
 fetchRecipes()
@@ -10,7 +15,8 @@ async function fetchRecipes() {
     const data = await response.json()
 
     const recipeList = document.querySelector('#recipe-list')
-    recipeList.innerHTML = data.meals.slice(0, 6).map(meal => `
+    // TODO: update pagination implementation 
+    recipeList.innerHTML = data.meals.slice(0, 11).map(meal => `
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           <img src="${meal.strMealThumb}" class="card-img-top" alt="${meal.strMeal}">

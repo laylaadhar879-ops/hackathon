@@ -6,6 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        recipes: resolve(__dirname, 'recipes.html'),
         contact: resolve(__dirname, 'contact.html'),
         recipe: resolve(__dirname, 'recipe-detail.html'),
         // Add more pages here as you create them

@@ -1,5 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '../../styles/global.css'
 import './style.css'
+import { insertNavbar } from '../../components/navbar/navbar.js'
+import { createDonateButton } from '../../components/donate-button/donate-button.js'
+
+// Insert the navbar at the top of the page
+insertNavbar('recipe-detail')
 
 // Get recipe ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search)
@@ -10,7 +16,7 @@ if (recipeId) {
 } else {
   document.querySelector('#recipe-detail').innerHTML = `
     <div class="alert alert-warning">No recipe ID provided</div>
-    <a href="/" class="btn btn-primary">Back to Home</a>
+    <a href="/recipes.html" class="btn btn-primary">Back to Recipes</a>
   `
 }
 
@@ -35,7 +41,10 @@ async function fetchRecipeDetail(id) {
           <p class="lead">${recipe.strCategory} - ${recipe.strArea}</p>
           <h3>Instructions</h3>
           <p>${recipe.strInstructions}</p>
-          <a href="/" class="btn btn-secondary">Back to Home</a>
+          <div class="mt-3">
+            <a href="/recipes.html" class="btn btn-secondary">Back to Recipes</a>
+            ${createDonateButton()}
+          </div>
         </div>
       </div>
     `
@@ -43,7 +52,7 @@ async function fetchRecipeDetail(id) {
     console.error('Error fetching recipe:', error)
     document.querySelector('#recipe-detail').innerHTML = `
       <div class="alert alert-danger">Error loading recipe</div>
-      <a href="/" class="btn btn-primary">Back to Home</a>
+      <a href="/recipes.html" class="btn btn-primary">Back to Recipes</a>
     `
   }
 }

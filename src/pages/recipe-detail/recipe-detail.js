@@ -1,5 +1,9 @@
 import './style.css'
+import '../../components/charity-list/charity-list.css'
 import { createDonateButton } from '../../components/donate-button/donate-button.js'
+import { createCharityModal } from '../../components/charity-list/charity-list.js'
+import { getUserLocation } from '../../services/location.js'
+import { getFoodCharityProjects, estimateMealValue } from '../../services/globalgiving.js'
 
 // Get recipe ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search)
@@ -16,8 +20,13 @@ if (recipeId) {
 
 async function fetchRecipeDetail(id) {
   try {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
-    const data = await response.json()
+    // Fetch recipe and user location in parallel
+    const [recipeResponse, userLocation] = await Promise.all([
+      fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`),
+      getUserLocation(),
+    ])
+
+    const data = await recipeResponse.json()
 
     if (!data.meals) {
       throw new Error('Recipe not found')
@@ -25,6 +34,7 @@ async function fetchRecipeDetail(id) {
 
     const recipe = data.meals[0]
 
+    // Render recipe with donate button
     document.querySelector('#recipe-detail').innerHTML = `
       <div class="row">
         <div class="col-md-6">
@@ -42,6 +52,17 @@ async function fetchRecipeDetail(id) {
         </div>
       </div>
     `
+
+    // Fetch charity projects in the background
+    const charityProjects = await getFoodCharityProjects(userLocation.countryCode, 6)
+
+    // Calculate the estimated value of this meal in user's local currency
+    const mealValue = estimateMealValue(recipe, userLocation)
+
+    // Add the charity modal to the page with recipe and meal value
+    const modalHtml = createCharityModal(charityProjects, userLocation, recipe, mealValue)
+    document.body.insertAdjacentHTML('beforeend', modalHtml)
+
   } catch (error) {
     console.error('Error fetching recipe:', error)
     document.querySelector('#recipe-detail').innerHTML = `

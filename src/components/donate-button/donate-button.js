@@ -1,19 +1,20 @@
 import './donate-button.css'
 
 /**
- * Creates a donate button that links to the food bank donation page
+ * Creates a donate button that opens the charity selection modal
  * @returns {string} The donate button HTML
  */
 export function createDonateButton() {
   return `
-    <a
-      href="https://www.lchaimfoodbank.co.uk/donate/"
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      type="button"
+      data-bs-toggle="modal"
+      data-bs-target="#charityModal"
       class="donate-button btn btn-success"
     >
+      <i class="bi bi-heart-fill"></i>
       Donate this meal
-    </a>
+    </button>
   `
 }
 

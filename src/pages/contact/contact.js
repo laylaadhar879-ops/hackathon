@@ -1,6 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '../../styles/global.css'
 import './style.css'
+import { insertNavbar } from '../../components/navbar/navbar.js'
 import { z } from 'zod'
+
+// Insert the navbar at the top of the page
+insertNavbar('contact')
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),

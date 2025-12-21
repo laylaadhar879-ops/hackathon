@@ -1,6 +1,44 @@
-# Hackathon Project
+# Recipe App - Hackathon Project
 
-A vanilla JavaScript project using Vite, Bootstrap, and Zod for form validation.
+A multi-page vanilla JavaScript application using Vite, Bootstrap, and Zod for form validation.
+
+## Project Architecture
+
+This is a **multi-page application** (not a single-page app). Each page is a separate HTML file with its own JavaScript and CSS. Pages are organized in a modular structure for better maintainability.
+
+## Current Pages
+
+The application currently has four pages:
+
+1. **Home** (`/` or `/index.html`) - Welcome page with lorem text
+   - Files: `index.html`, `src/pages/home/main.js`, `src/pages/home/style.css`
+
+2. **Recipes** (`/recipes.html`) - Browse recipe cards
+   - Files: `recipes.html`, `src/pages/recipes/recipes.js`, `src/pages/recipes/style.css`
+   - Fetches recipes from TheMealDB API
+   - Displays 21 recipes in a grid
+
+3. **Recipe Detail** (`/recipe-detail.html?id=123`) - View single recipe
+   - Files: `recipe-detail.html`, `src/pages/recipe-detail/recipe-detail.js`, `src/pages/recipe-detail/style.css`
+   - Shows recipe image, instructions, and details
+   - Includes "Donate this meal" button
+
+4. **Contact** (`/contact.html`) - Contact form with validation
+   - Files: `contact.html`, `src/pages/contact/contact.js`, `src/pages/contact/style.css`
+   - Uses Zod for form validation
+
+## Current Components
+
+The application has two reusable components:
+
+1. **Navbar** (`src/components/navbar/`)
+   - Used on all pages
+   - Highlights the active page
+   - Navigation links: Home, Recipes, Contact
+
+2. **Donate Button** (`src/components/donate-button/`)
+   - Used on recipe detail page
+   - Links to L'Chaim Food Bank donation page
 
 ## Prerequisites
 
@@ -212,124 +250,151 @@ z.string().optional()
 z.string().min(2, { message: 'Too short!' })
 ```
 
-## Creating Components
+## How Pages Work
 
-Components are reusable pieces of UI that you can use throughout your app.
+Each page consists of three files:
 
-### Step 1: Create the Components Folder
+1. **HTML file** (at project root) - Minimal structure
+2. **JavaScript file** (in `src/pages/[page-name]/`) - Page logic
+3. **CSS file** (in `src/pages/[page-name]/`) - Page-specific styles
 
-```bash
-mkdir src/components
-```
+### Example: Home Page
 
-### Step 2: Create a Component File
-
-Create a file like `src/components/RecipeCard.js`:
-
-```javascript
-// src/components/RecipeCard.js
-export function RecipeCard(recipe) {
-  return `
-    <div class="card h-100">
-      <img src="${recipe.image}" class="card-img-top" alt="${recipe.name}">
-      <div class="card-body">
-        <h5 class="card-title">${recipe.name}</h5>
-        <p class="card-text">${recipe.description}</p>
-        <a href="#/recipe/${recipe.id}" class="btn btn-primary">View Recipe</a>
-      </div>
+**`index.html` (at root)**:
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe App - Home</title>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>Welcome to Recipe App</h1>
+      <p class="lead">Your one-stop destination for amazing recipes</p>
     </div>
-  `
+
+    <!-- Link to the page's JavaScript -->
+    <script type="module" src="/src/pages/home/main.js"></script>
+  </body>
+</html>
+```
+
+**`src/pages/home/main.js`**:
+```javascript
+import 'bootstrap/dist/css/bootstrap.min.css'
+import '../../styles/global.css'
+import './style.css'
+import { insertNavbar } from '../../components/navbar/navbar.js'
+
+// Insert the navbar at the top of the page
+insertNavbar('home')
+```
+
+**`src/pages/home/style.css`**:
+```css
+/* Home page specific styles */
+.container {
+  border-radius: 8px;
 }
 ```
 
-### Step 3: Use the Component
+### How CSS Imports Work
 
+CSS is imported **in JavaScript files**, not in HTML. Vite handles this automatically:
+
+**Development Mode** (`npm run dev`):
+- Vite sees `import './style.css'` in your JS file
+- Vite injects the CSS as a `<style>` tag into the page
+- Changes trigger hot-reload (instant updates)
+
+**Production Build** (`npm run build`):
+- Vite bundles all CSS imports into optimized `.css` files
+- Vite adds `<link rel="stylesheet">` tags to the HTML automatically
+- CSS is minified and cached
+
+This means beginners don't need to manage `<link>` tags manually!
+
+## Creating Reusable Components
+
+Components are UI elements used across multiple pages (like navbar, buttons, cards).
+
+### Component Structure
+
+Each component has its own folder with:
+- `component-name.js` - Component logic
+- `component-name.css` - Component styles
+
+### Example: Navbar Component
+
+**`src/components/navbar/navbar.js`**:
 ```javascript
-// In any file
-import { RecipeCard } from './components/RecipeCard.js'
+import './navbar.css'
 
-const recipe = {
-  id: 1,
-  name: 'Chocolate Cake',
-  description: 'Delicious chocolate cake',
-  image: '/images/cake.jpg'
-}
-
-document.querySelector('#app').innerHTML = `
-  <div class="container">
-    ${RecipeCard(recipe)}
-  </div>
-`
-```
-
-### More Component Examples
-
-**Navbar Component** (`src/components/Navbar.js`):
-
-```javascript
-export function Navbar() {
+/**
+ * Creates the navigation bar HTML
+ * @param {string} activePage - The currently active page
+ * @returns {string} The navbar HTML
+ */
+export function createNavbar(activePage = 'home') {
   return `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#/">Recipe App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#/contact">Contact</a>
-            </li>
-          </ul>
-        </div>
+        <a class="navbar-brand" href="/">Recipe App</a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link ${activePage === 'home' ? 'active' : ''}" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link ${activePage === 'recipes' ? 'active' : ''}" href="/recipes.html">Recipes</a>
+          </li>
+        </ul>
       </div>
     </nav>
   `
 }
-```
 
-**Button Component** (`src/components/Button.js`):
-
-```javascript
-export function Button(text, variant = 'primary') {
-  return `<button class="btn btn-${variant}">${text}</button>`
+/**
+ * Inserts the navbar at the beginning of the body element
+ * @param {string} activePage - The currently active page
+ */
+export function insertNavbar(activePage = 'home') {
+  const navbarHtml = createNavbar(activePage)
+  // 'afterbegin' = right after the opening <body> tag
+  document.body.insertAdjacentHTML('afterbegin', navbarHtml)
 }
 ```
 
-## Creating Pages
+**`src/components/navbar/navbar.css`**:
+```css
+/* Custom navbar styles if needed */
+/* Bootstrap styles are already included */
+```
 
-Pages are full views that users navigate to. Each page represents a different screen in your app.
+### Using a Component
 
-Each page gets its own folder with:
-- `PageName.js` - The page component
-- `index.js` - For easy imports
-- `PageName.css` - Page-specific styles (optional)
+**In any page's JavaScript file**:
+```javascript
+import { insertNavbar } from '../../components/navbar/navbar.js'
 
-### Step 1: Create the Pages Folder
+// Add the navbar to the page
+insertNavbar('recipes')  // 'recipes' will be highlighted
+```
+
+## Adding a New Page
+
+To add a new page to the application, follow these steps:
+
+### Step 1: Create the Page Folder
 
 ```bash
-mkdir src/pages
+mkdir src/pages/my-new-page
 ```
 
-### Step 2: Create a Page Folder and Files
+### Step 2: Create the Page Files
 
-**Home Page Structure**:
-```
-src/pages/HomePage/
-├── HomePage.js      # The page component
-├── index.js         # Exports the component
-└── HomePage.css     # Page styles (optional)
-```
-
-Create the folder:
-```bash
-mkdir src/pages/HomePage
-```
-
-**Create `src/pages/HomePage/HomePage.js`**:
+**Create `src/pages/my-new-page/my-page.js`**:
 
 ```javascript
 // src/pages/HomePage/HomePage.js
@@ -812,58 +877,46 @@ What did you decide?
 
 ## Project Structure
 
-Here's how to organize your project:
-
 ```
 hackathon/
-├── docs/                           # Documentation
-│   ├── spikes/                    # Research documents
-│   │   ├── README.md              # Spike guide
-│   │   └── example-spike.md
-│   └── README.md                  # Documentation guide
-├── src/
-│   ├── components/                # Reusable UI components
-│   │   ├── Navbar.js
-│   │   ├── RecipeCard.js
-│   │   └── Button.js
-│   ├── pages/                     # Full page views
-│   │   ├── HomePage/
-│   │   │   ├── HomePage.js        # Page component
-│   │   │   ├── index.js           # Export file
-│   │   │   └── HomePage.css       # Page styles
-│   │   ├── RecipeDetailPage/
-│   │   │   ├── RecipeDetailPage.js
-│   │   │   ├── index.js
-│   │   │   └── RecipeDetailPage.css
-│   │   └── ContactPage/
-│   │       ├── ContactPage.js
-│   │       ├── index.js
-│   │       └── ContactPage.css
-│   ├── services/                  # API calls and business logic (optional)
-│   │   └── recipeAPI.js
-│   ├── router.js                  # Routing logic
-│   ├── main.js                    # Main entry point
-│   └── style.css                  # Global CSS
-├── public/                        # Static files (images, etc.)
-├── index.html                     # HTML entry point
-├── package.json                   # Dependencies
-└── README.md                      # This file
+├── index.html                      # Home page HTML
+├── recipes.html                    # Recipes list page HTML
+├── contact.html                    # Contact form page HTML
+├── recipe-detail.html              # Recipe detail page HTML
+├── vite.config.js                  # Vite build configuration
+├── package.json                    # Dependencies and scripts
+└── src/
+    ├── components/                 # Reusable UI components
+    │   ├── navbar/
+    │   │   ├── navbar.js           # Navbar component logic
+    │   │   └── navbar.css          # Navbar styles
+    │   └── donate-button/
+    │       ├── donate-button.js    # Donate button component
+    │       └── donate-button.css   # Donate button styles
+    ├── pages/                      # Page-specific code
+    │   ├── home/
+    │   │   ├── main.js             # Home page JavaScript
+    │   │   └── style.css           # Home page styles
+    │   ├── recipes/
+    │   │   ├── recipes.js          # Recipes list JavaScript
+    │   │   └── style.css           # Recipes page styles
+    │   ├── contact/
+    │   │   ├── contact.js          # Contact form JavaScript
+    │   │   └── style.css           # Contact page styles
+    │   └── recipe-detail/
+    │       ├── recipe-detail.js    # Recipe detail JavaScript
+    │       └── style.css           # Recipe detail styles
+    └── styles/
+        └── global.css              # Global/shared styles
 ```
 
-### Creating the Folder Structure
+### Architecture Principles
 
-Run these commands:
-
-```bash
-mkdir src/components
-mkdir src/pages
-mkdir src/services
-mkdir src/pages/HomePage
-mkdir src/pages/RecipeDetailPage
-mkdir src/pages/ContactPage
-```
-
-Or create them as you need each page.
+1. **HTML at Root**: Each page has its own HTML file at the project root for simple URLs
+2. **Page Folders**: Page-specific JavaScript and CSS are organized in `src/pages/[page-name]/`
+3. **Reusable Components**: Shared UI elements live in `src/components/[component-name]/`
+4. **Component Co-location**: Each component has its own folder with `.js` and `.css` files together
+5. **CSS Imports**: Styles are imported in JavaScript files, not in HTML
 
 ## Learn More
 

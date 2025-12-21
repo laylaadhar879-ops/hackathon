@@ -1,11 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../../styles/global.css'
 import './style.css'
-import { insertNavbar } from '../../components/navbar/navbar.js'
 import { z } from 'zod'
-
-// Insert the navbar at the top of the page
-insertNavbar('contact')
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -14,8 +8,6 @@ const contactSchema = z.object({
 })
 
 document.querySelector('#contactForm').addEventListener('submit', (e) => {
-  e.preventDefault()
-
   // Clear previous errors
   document.querySelectorAll('[id$="-error"]').forEach(el => el.textContent = '')
 
@@ -27,9 +19,10 @@ document.querySelector('#contactForm').addEventListener('submit', (e) => {
 
   try {
     contactSchema.parse(formData)
-    alert('Message sent successfully!')
-    e.target.reset()
+    // Validation passed - allow Pageclip to handle the submission
   } catch (error) {
+    // Validation failed - prevent submission and show errors
+    e.preventDefault()
     if (error instanceof z.ZodError) {
       error.errors.forEach(err => {
         const errorElement = document.querySelector(`#${err.path[0]}-error`)

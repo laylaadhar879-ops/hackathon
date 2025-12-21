@@ -1,5 +1,16 @@
 /* Global styles for the entire app */
 
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap');
+
+/* Global Variables */
+:root {
+  --primary-color: #C41E3A;
+  --secondary-color: #2C5F2D;
+  --background-color: #FFFDD0;
+  --complementary-color: #FFD700;
+}
+
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;

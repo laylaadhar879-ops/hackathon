@@ -1,11 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../../styles/global.css'
 import './style.css'
-import { insertNavbar } from '../../components/navbar/navbar.js'
 import { createDonateButton } from '../../components/donate-button/donate-button.js'
-
-// Insert the navbar at the top of the page
-insertNavbar('recipe-detail')
 
 // Get recipe ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search)

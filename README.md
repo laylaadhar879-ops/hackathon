@@ -29,16 +29,13 @@ The application currently has four pages:
 
 ## Current Components
 
-The application has two reusable components:
+The application has one reusable component:
 
-1. **Navbar** (`src/components/navbar/`)
-   - Used on all pages
-   - Highlights the active page
-   - Navigation links: Home, Recipes, Contact
-
-2. **Donate Button** (`src/components/donate-button/`)
+1. **Donate Button** (`src/components/donate-button/`)
    - Used on recipe detail page
    - Links to L'Chaim Food Bank donation page
+
+**Note**: The navbar is static HTML included directly in each page (not a component) to prevent Flash of Unstyled Content.
 
 ## Prerequisites
 
@@ -90,7 +87,7 @@ npm run build
 
 ## Using Bootstrap
 
-Bootstrap is already configured and imported in `src/main.js`.
+Bootstrap is already configured and imported in `src/main.css`, which is loaded in the `<head>` of each HTML file to prevent Flash of Unstyled Content (FOUC).
 
 ### How to Use Bootstrap Classes
 
@@ -267,9 +264,28 @@ Each page consists of three files:
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/main.css">
     <title>Recipe App - Home</title>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Recipe App</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/recipes.html">Recipes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     <div class="container mt-4">
       <h1>Welcome to Recipe App</h1>
       <p class="lead">Your one-stop destination for amazing recipes</p>
@@ -283,13 +299,9 @@ Each page consists of three files:
 
 **`src/pages/home/main.js`**:
 ```javascript
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../../styles/global.css'
 import './style.css'
-import { insertNavbar } from '../../components/navbar/navbar.js'
 
-// Insert the navbar at the top of the page
-insertNavbar('home')
+// Page-specific logic goes here
 ```
 
 **`src/pages/home/style.css`**:
@@ -302,23 +314,30 @@ insertNavbar('home')
 
 ### How CSS Imports Work
 
-CSS is imported **in JavaScript files**, not in HTML. Vite handles this automatically:
+This project uses a **hybrid approach** for CSS to prevent Flash of Unstyled Content (FOUC):
+
+**Global CSS (Bootstrap, shared styles)**: Loaded in HTML `<head>` via `src/main.css`
+- `<link rel="stylesheet" href="/src/main.css">` in each HTML file
+- `src/main.css` imports Bootstrap and global styles
+- Loads before page renders to prevent FOUC
+- Navbar is directly in HTML with styles ready
+
+**Page-specific CSS**: Imported in JavaScript files
+- `import './style.css'` in your page's JS file
+- Vite processes these imports automatically
 
 **Development Mode** (`npm run dev`):
-- Vite sees `import './style.css'` in your JS file
-- Vite injects the CSS as a `<style>` tag into the page
+- Vite processes `<link href="/src/main.css">` and CSS imports in JS files
+- Injects CSS as `<style>` tags into the page
 - Changes trigger hot-reload (instant updates)
 
 **Production Build** (`npm run build`):
-- Vite bundles all CSS imports into optimized `.css` files
-- Vite adds `<link rel="stylesheet">` tags to the HTML automatically
+- Vite bundles all CSS into optimized `.css` files
 - CSS is minified and cached
-
-This means beginners don't need to manage `<link>` tags manually!
 
 ## Creating Reusable Components
 
-Components are UI elements used across multiple pages (like navbar, buttons, cards).
+Components are UI elements used across multiple pages (like buttons, cards).
 
 ### Component Structure
 
@@ -326,61 +345,56 @@ Each component has its own folder with:
 - `component-name.js` - Component logic
 - `component-name.css` - Component styles
 
-### Example: Navbar Component
+### Example: Donate Button Component
 
-**`src/components/navbar/navbar.js`**:
+**`src/components/donate-button/donate-button.js`**:
 ```javascript
-import './navbar.css'
+import './donate-button.css'
 
 /**
- * Creates the navigation bar HTML
- * @param {string} activePage - The currently active page
- * @returns {string} The navbar HTML
+ * Creates a donate button that links to the food bank donation page
+ * @returns {string} The donate button HTML
  */
-export function createNavbar(activePage = 'home') {
+export function createDonateButton() {
   return `
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Recipe App</a>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link ${activePage === 'home' ? 'active' : ''}" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ${activePage === 'recipes' ? 'active' : ''}" href="/recipes.html">Recipes</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <a
+      href="https://www.lchaimfoodbank.co.uk/donate/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="donate-button btn btn-success"
+    >
+      Donate this meal
+    </a>
   `
-}
-
-/**
- * Inserts the navbar at the beginning of the body element
- * @param {string} activePage - The currently active page
- */
-export function insertNavbar(activePage = 'home') {
-  const navbarHtml = createNavbar(activePage)
-  // 'afterbegin' = right after the opening <body> tag
-  document.body.insertAdjacentHTML('afterbegin', navbarHtml)
 }
 ```
 
-**`src/components/navbar/navbar.css`**:
+**`src/components/donate-button/donate-button.css`**:
 ```css
-/* Custom navbar styles if needed */
-/* Bootstrap styles are already included */
+.donate-button {
+  margin-top: 1rem;
+}
 ```
 
 ### Using a Component
 
 **In any page's JavaScript file**:
 ```javascript
-import { insertNavbar } from '../../components/navbar/navbar.js'
+import { createDonateButton } from '../../components/donate-button/donate-button.js'
 
-// Add the navbar to the page
-insertNavbar('recipes')  // 'recipes' will be highlighted
+// Use the component in your HTML string
+const html = `
+  <div class="recipe-detail">
+    <h1>Recipe Name</h1>
+    <p>Recipe instructions...</p>
+    ${createDonateButton()}
+  </div>
+`
 ```
+
+### Note About the Navbar
+
+The navbar is **not a JavaScript component** in this project. It's static HTML included directly in each HTML file to prevent Flash of Unstyled Content (FOUC). The navbar HTML is copied into each page with the appropriate active link highlighted.
 
 ## Adding a New Page
 
@@ -886,10 +900,8 @@ hackathon/
 ├── vite.config.js                  # Vite build configuration
 ├── package.json                    # Dependencies and scripts
 └── src/
+    ├── main.css                    # Main CSS entry (Bootstrap + global styles)
     ├── components/                 # Reusable UI components
-    │   ├── navbar/
-    │   │   ├── navbar.js           # Navbar component logic
-    │   │   └── navbar.css          # Navbar styles
     │   └── donate-button/
     │       ├── donate-button.js    # Donate button component
     │       └── donate-button.css   # Donate button styles
@@ -916,7 +928,10 @@ hackathon/
 2. **Page Folders**: Page-specific JavaScript and CSS are organized in `src/pages/[page-name]/`
 3. **Reusable Components**: Shared UI elements live in `src/components/[component-name]/`
 4. **Component Co-location**: Each component has its own folder with `.js` and `.css` files together
-5. **CSS Imports**: Styles are imported in JavaScript files, not in HTML
+5. **Hybrid CSS Loading**:
+   - Global styles (Bootstrap, shared CSS, navbar) loaded in HTML via `src/main.css` to prevent FOUC
+   - Page-specific styles imported in JavaScript files
+6. **Static Navbar**: Navbar HTML is included directly in each page (not inserted via JavaScript) to prevent flash on load
 
 ## Learn More
 

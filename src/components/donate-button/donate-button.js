@@ -2,18 +2,31 @@ import './donate-button.css'
 
 /**
  * Creates a donate button that opens the charity selection modal
+ * @param {Object} options - Button options
+ * @param {string} options.size - Button size ('sm', 'lg', or default)
+ * @param {boolean} options.fullWidth - Whether button should be full width
+ * @param {string} options.text - Button text
  * @returns {string} The donate button HTML
  */
-export function createDonateButton() {
+export function createDonateButton(options = {}) {
+  const {
+    size = 'lg',
+    fullWidth = true,
+    text = 'Donate This Meal'
+  } = options
+
+  const sizeClass = size ? `btn-${size}` : ''
+  const widthClass = fullWidth ? 'w-100' : ''
+
   return `
     <button
       type="button"
       data-bs-toggle="modal"
       data-bs-target="#charityModal"
-      class="donate-button btn btn-success"
+      class="donate-button btn btn-success ${sizeClass} ${widthClass}"
     >
       <i class="bi bi-heart-fill"></i>
-      Donate this meal
+      ${text}
     </button>
   `
 }

@@ -34,20 +34,74 @@ async function fetchRecipeDetail(id) {
 
     const recipe = data.meals[0]
 
-    // Render recipe with donate button
+    // Extract ingredients and measurements
+    const ingredients = extractIngredients(recipe)
+    const instructions = extractInstructions(recipe.strInstructions)
+
+    // Render recipe with two-column layout
     document.querySelector('#recipe-detail').innerHTML = `
-      <div class="row">
-        <div class="col-md-6">
-          <img src="${recipe.strMealThumb}" class="img-fluid rounded" alt="${recipe.strMeal}">
+      <div class="row mb-4">
+        <div class="col">
+          <a href="/recipes.html" class="btn btn-outline-secondary mb-3">
+            <i class="bi bi-arrow-left"></i> Back to Recipes
+          </a>
         </div>
-        <div class="col-md-6">
-          <h1>${recipe.strMeal}</h1>
-          <p class="lead">${recipe.strCategory} - ${recipe.strArea}</p>
-          <h3>Instructions</h3>
-          <p>${recipe.strInstructions}</p>
-          <div class="mt-3">
-            <a href="/recipes.html" class="btn btn-secondary">Back to Recipes</a>
+      </div>
+
+      <div class="row">
+        <!-- Main Content Column -->
+        <div class="col-lg-8">
+          <!-- Recipe Image -->
+          <div class="mb-4">
+            <img src="${recipe.strMealThumb}" class="img-fluid rounded" alt="${recipe.strMeal}" style="width: 100%; max-height: 400px; object-fit: cover;">
+          </div>
+
+          <!-- Recipe Title and Description -->
+          <h1 class="mb-3">${recipe.strMeal}</h1>
+          <p class="lead mb-4">${recipe.strCategory} - ${recipe.strArea} cuisine</p>
+
+          <!-- Recipe Meta Info -->
+          <div class="row mb-4">
+            <div class="col-sm-4">
+              <strong>Prep Time:</strong><br>
+              <span class="text-muted">30 mins</span>
+            </div>
+            <div class="col-sm-4">
+              <strong>Servings:</strong><br>
+              <span class="text-muted">4</span>
+            </div>
+            <div class="col-sm-4">
+              <strong>Difficulty:</strong><br>
+              <span class="text-muted">Medium</span>
+            </div>
+          </div>
+
+          <!-- Ingredients Section -->
+          <h3 class="mb-3">Ingredients</h3>
+          <ul class="list-group mb-4">
+            ${ingredients.map(ingredient => `
+              <li class="list-group-item">${ingredient}</li>
+            `).join('')}
+          </ul>
+
+          <!-- Instructions Section -->
+          <h3 class="mb-3">Instructions</h3>
+          <ol class="list-group list-group-numbered mb-4">
+            ${instructions.map(instruction => `
+              <li class="list-group-item">${instruction}</li>
+            `).join('')}
+          </ol>
+        </div>
+
+        <!-- Donation Sidebar -->
+        <div class="col-lg-4">
+          <div class="border rounded p-4 bg-light position-sticky" style="top: 20px;">
+            <h4 class="mb-3">Help Feed Someone</h4>
+            <p class="mb-3">Your donation can provide this meal to a family in need.</p>
             ${createDonateButton()}
+            <p class="small text-muted mt-3 mb-0">
+              Every donation helps us prepare and deliver meals to those who need them most.
+            </p>
           </div>
         </div>
       </div>
@@ -70,4 +124,48 @@ async function fetchRecipeDetail(id) {
       <a href="/recipes.html" class="btn btn-primary">Back to Recipes</a>
     `
   }
+}
+
+/**
+ * Extract ingredients from recipe object
+ * @param {Object} recipe - Recipe data from MealDB API
+ * @returns {Array} Array of ingredient strings
+ */
+function extractIngredients(recipe) {
+  const ingredients = []
+  for (let i = 1; i <= 20; i++) {
+    const ingredient = recipe[`strIngredient${i}`]
+    const measure = recipe[`strMeasure${i}`]
+
+    if (ingredient && ingredient.trim()) {
+      const ingredientText = measure && measure.trim()
+        ? `${measure.trim()} ${ingredient.trim()}`
+        : ingredient.trim()
+      ingredients.push(ingredientText)
+    }
+  }
+  return ingredients
+}
+
+/**
+ * Extract and clean up instructions from recipe
+ * @param {string} instructionsText - Raw instructions text from MealDB API
+ * @returns {Array} Array of cleaned instruction strings
+ */
+function extractInstructions(instructionsText) {
+  if (!instructionsText) return []
+
+  // Split by double newlines (handles both \r\n\r\n and \n\n)
+  const steps = instructionsText
+    .split(/\r\n\r\n|\n\n/)
+    .map(step => step.trim())
+    .filter(step => step.length > 0)
+
+  // Clean up step labels (STEP 1, step 1, or just numbers)
+  return steps.map(step => {
+    // Remove patterns like "STEP 1", "step 1", "1", "2", etc. at the start
+    return step
+      .replace(/^(STEP\s+\d+|step\s+\d+|\d+)\s*\r?\n?/i, '')
+      .trim()
+  }).filter(step => step.length > 0)
 }

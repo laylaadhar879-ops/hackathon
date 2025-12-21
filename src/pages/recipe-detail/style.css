@@ -1,2 +1,38 @@
 /* Recipe detail page specific styles */
-/* Add any styles specific to the recipe detail page here */
+
+/* Recipe image styling */
+.recipe-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Donation sidebar styling */
+.donation-sidebar {
+  background-color: #f8f9fa;
+}
+
+/* Sticky positioning for donation sidebar */
+@media (min-width: 992px) {
+  .position-sticky {
+    position: sticky !important;
+  }
+}
+
+/* List group styling for instructions */
+.list-group-numbered {
+  counter-reset: list-counter;
+}
+
+.list-group-numbered > .list-group-item {
+  counter-increment: list-counter;
+}
+
+.list-group-numbered > .list-group-item::before {
+  content: counter(list-counter);
+  display: inline-block;
+  width: 2em;
+  margin-right: 0.5em;
+  font-weight: bold;
+  color: #198754;
+}

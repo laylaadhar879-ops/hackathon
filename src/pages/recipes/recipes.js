@@ -5,6 +5,8 @@ let allRecipes = []
 let displayedRecipes = []
 let recipesPerPage = 6
 let currentPage = 1
+let currentCategory = '' // Store the current filter category
+let currentArea = '' // Store the current filter area
 
 // Initialize the page
 init()
@@ -97,6 +99,8 @@ async function fetchRecipes(searchTerm = '') {
     if (data.meals) {
       allRecipes = data.meals
       currentPage = 1
+      currentCategory = '' // Reset filters
+      currentArea = ''
       displayRecipes()
     } else {
       recipeList.innerHTML = `
@@ -128,6 +132,8 @@ async function fetchRecipesByCategory(category) {
     if (data.meals) {
       allRecipes = data.meals
       currentPage = 1
+      currentCategory = category // Store the selected category
+      currentArea = '' // Clear area filter
       displayRecipes()
     } else {
       recipeList.innerHTML = `
@@ -154,6 +160,8 @@ async function fetchRecipesByArea(area) {
     if (data.meals) {
       allRecipes = data.meals
       currentPage = 1
+      currentCategory = '' // Clear category filter
+      currentArea = area // Store the selected area
       displayRecipes()
     } else {
       recipeList.innerHTML = `
@@ -203,25 +211,41 @@ function displayRecipes() {
 // Create a recipe card HTML
 function createRecipeCard(meal) {
   // Handle both full meal objects and filtered meal objects (which have less data)
-  const category = meal.strCategory || 'Unknown'
-  const area = meal.strArea || 'Unknown'
-  const description = meal.strCategory ? `${meal.strCategory} cuisine` : 'Delicious recipe'
+  const category = meal.strCategory || currentCategory
+  const area = meal.strArea || currentArea
+  
+  // Determine what to show in the badge
+  // If we have a category, use it. If we're filtering by area only, use the area
+  const badgeText = category || (currentArea && !currentCategory ? currentArea : 'Recipe')
+  
+  // Create description based on available info
+  let description = 'Delicious recipe'
+  if (category) {
+    description = `${category} cuisine`
+  } else if (currentArea) {
+    description = `${currentArea} cuisine`
+  }
+  
+  // Only show the area field if we have area info AND we're not already showing it in the badge
+  const showAreaField = area && !(currentArea && !currentCategory)
 
   return `
     <div class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100 recipe-card" data-recipe-id="${meal.idMeal}">
         <div class="recipe-image-container border-bottom bg-light">
           <img src="${meal.strMealThumb}" class="card-img-top" alt="${meal.strMeal}">
-          <div class="recipe-category-badge">${category}</div>
+          <div class="recipe-category-badge">${badgeText}</div>
         </div>
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${meal.strMeal}</h5>
           <p class="card-text flex-grow-1">${description}</p>
+          ${showAreaField ? `
           <div class="mb-3">
             <small class="text-muted">
               <strong>Area:</strong> ${area}
             </small>
           </div>
+          ` : ''}
           <a href="/recipe-detail.html?id=${meal.idMeal}" class="btn btn-primary recipe-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill me-2" viewBox="0 0 16 16">
               <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>

@@ -36,3 +36,14 @@
   font-weight: bold;
   color: #198754;
 }
+
+/* Donate button styling */
+.donate-button {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.donate-button:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}

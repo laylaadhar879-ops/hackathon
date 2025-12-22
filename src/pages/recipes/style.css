@@ -3,3 +3,52 @@
 .container {
   border-radius: 8px;
 }
+
+.recipe-image-container {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.recipe-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Category badge overlay */
+.recipe-category-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Card hover effect */
+.recipe-card {
+  cursor: pointer;
+}
+
+.recipe-card:hover .recipe-image-container img {
+  transform: scale(1.08);
+}
+
+/* Recipe button styling - hidden by default, revealed on hover */
+.recipe-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.recipe-card:hover .recipe-btn {
+  opacity: 1;
+}

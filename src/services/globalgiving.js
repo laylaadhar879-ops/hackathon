@@ -5,27 +5,18 @@
 
 import { convertFromEUR } from './currency.js';
 
-// API key is loaded from environment variable (.env file)
-// Get your free API key from https://www.globalgiving.org/dy/v2/user/api/
-// Add it to your .env file as: VITE_GLOBALGIVING_API_KEY=your_key_here
-const API_KEY = import.meta.env.VITE_GLOBALGIVING_API_KEY;
-
 /**
  * Fetch multiple food/hunger-related charity projects for user to choose from
- * Uses the search API which automatically filters out inactive projects
- * Search API uses offset pagination with &start parameter
- * Returns maximum 10 projects per request (API limit)
+ * Now uses Cloudflare Function to keep API key secure on the server
  * @param {string} countryCode - ISO 2-letter country code (not used in simple version)
  * @param {number} start - Offset for pagination (default: 0)
  * @returns {Promise<Object>} - Object containing projects array and pagination info
  */
 export async function getFoodCharityProjects(countryCode, start = 0) {
   try {
-    // Use the search endpoint with theme filter
-    // Note: Search API automatically returns only active projects (active = true)
-    // Using q=* to get all projects that match the theme filter
-    // API returns max 10 results per request
-    const url = `https://api.globalgiving.org/api/public/services/search/projects?api_key=${API_KEY}&q=*&filter=theme:hunger&start=${start}`;
+    // Call our Cloudflare Function instead of the GlobalGiving API directly
+    // This keeps the API key secure on the server side
+    const url = `/api/charities?start=${start}${countryCode ? `&countryCode=${countryCode}` : ''}`;
 
     const response = await fetch(url, {
       headers: { 'Accept': 'application/json' },
@@ -37,32 +28,9 @@ export async function getFoodCharityProjects(countryCode, start = 0) {
 
     const data = await response.json();
 
-    if (data.search && data.search.response && data.search.response.projects && data.search.response.projects.project) {
-      let projects = Array.isArray(data.search.response.projects.project)
-        ? data.search.response.projects.project
-        : [data.search.response.projects.project];
-
-      // Filter out any inactive projects (extra safety, though search should only return active)
-      projects = projects.filter(p => p.active === true || p.status === 'active');
-
-      // Tag all as global
-      projects.forEach(p => {
-        p._source = 'global';
-        p._sourceCountry = p.country || p.iso3166CountryCode || 'Unknown';
-      });
-
-      // Get total number of results from response
-      const totalFound = data.search.response.numberFound || 0;
-
-      // Return all projects from API (max 10) with offset-based pagination info
-      return {
-        projects: projects,
-        totalFound: totalFound,
-        currentStart: start,
-      };
-    }
-
-    return { projects: [], totalFound: 0, currentStart: start };
+    // The Cloudflare Function already processes the data,
+    // so we just return it directly
+    return data;
 
   } catch (error) {
     console.error('Error fetching charity projects:', error);

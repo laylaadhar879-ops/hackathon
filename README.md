@@ -160,12 +160,18 @@ src/
 To enable the donation feature:
 
 1. **Get API Key**: Follow instructions in `GLOBALGIVING_SETUP.md`
-2. **Configure `.env`**:
+2. **Configure `.dev.vars`** (for Cloudflare Functions):
+   ```bash
+   cp .dev.vars.example .dev.vars
    ```
-   VITE_GLOBALGIVING_API_KEY=your-api-key-here
+   Then edit `.dev.vars` and add your API key:
+   ```
+   GLOBALGIVING_API_KEY=your-api-key-here
    ```
 3. **Run dev server**: `npm run dev`
 4. **Test**: Navigate to any recipe detail page and click "Donate this meal"
+
+**Security Note**: The API key is now stored securely in Cloudflare Functions (not exposed in client-side code). See `CLOUDFLARE_FUNCTIONS_SETUP.md` for details.
 
 ### Customization
 
@@ -243,16 +249,19 @@ This will install:
 - Vite (build tool)
 - Bootstrap (CSS framework)
 - Zod (form validation)
+- Wrangler (Cloudflare Functions development)
 
 ### 2. Run Development Server
 
-Start the local development server:
+Start the local development server with Cloudflare Functions:
 
 ```bash
 npm run dev
 ```
 
-Your app will be available at `http://localhost:5173` (or another port if 5173 is busy)
+Your app will be available at `http://localhost:8788`
+
+**Note**: The dev server now runs through Wrangler to enable Cloudflare Functions for secure API key management. If you need to run only Vite (without functions), use `npm run dev:vite-only`.
 
 ### 3. Build for Production
 

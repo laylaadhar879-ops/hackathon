@@ -1,0 +1,5 @@
+# Cloudflare Functions Environment Variables (for local development)
+# Copy this file to .dev.vars and fill in your actual API key
+# Get your free API key from: https://www.globalgiving.org/dy/v2/user/api/
+
+GLOBALGIVING_API_KEY=your_api_key_here

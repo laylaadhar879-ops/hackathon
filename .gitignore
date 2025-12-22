@@ -14,6 +14,10 @@ dist-ssr
 
 # Environment variables
 .env
+.dev.vars
+
+# Wrangler (Cloudflare)
+.wrangler
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +29,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.claude

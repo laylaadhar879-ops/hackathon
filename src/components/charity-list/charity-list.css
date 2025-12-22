@@ -1,0 +1,89 @@
+/**
+ * Charity List Component Styles
+ */
+
+.charity-list-header h4 {
+  color: var(--primary-color, #C41E3A);
+  font-weight: 600;
+}
+
+.charity-project-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.charity-project-card:hover {
+  border-color: var(--secondary-color, #2C5F2D);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.charity-project-image {
+  height: 180px;
+  object-fit: cover;
+}
+
+.charity-project-title {
+  font-weight: 600;
+  color: var(--primary-color, #C41E3A);
+  font-size: 0.95rem;
+  min-height: 2.5rem;
+}
+
+.charity-project-summary {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #555;
+}
+
+.charity-project-card .btn-success {
+  background-color: var(--secondary-color, #2C5F2D);
+  border-color: var(--secondary-color, #2C5F2D);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.charity-project-card .btn-success:hover {
+  background-color: #1f4320;
+  border-color: #1f4320;
+  transform: scale(1.02);
+}
+
+.charity-project-card .badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Modal specific styles */
+.charity-modal .modal-header {
+  background-color: var(--secondary-color, #2C5F2D);
+  color: white;
+}
+
+.charity-modal .modal-title {
+  font-weight: 600;
+}
+
+.charity-modal .modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.charity-modal .modal-footer {
+  border-top: 2px solid #dee2e6;
+}
+
+@media (max-width: 768px) {
+  .charity-project-image {
+    height: 150px;
+  }
+
+  .charity-project-title {
+    font-size: 0.9rem;
+    min-height: auto;
+  }
+
+  .charity-project-summary {
+    font-size: 0.8rem;
+  }
+}

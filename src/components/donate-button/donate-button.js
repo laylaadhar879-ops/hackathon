@@ -1,19 +1,33 @@
 import './donate-button.css'
 
 /**
- * Creates a donate button that links to the food bank donation page
+ * Creates a donate button that opens the charity selection modal
+ * @param {Object} options - Button options
+ * @param {string} options.size - Button size ('sm', 'lg', or default)
+ * @param {boolean} options.fullWidth - Whether button should be full width
+ * @param {string} options.text - Button text
  * @returns {string} The donate button HTML
  */
-export function createDonateButton() {
+export function createDonateButton(options = {}) {
+  const {
+    size = 'lg',
+    fullWidth = true,
+    text = 'Donate This Meal'
+  } = options
+
+  const sizeClass = size ? `btn-${size}` : ''
+  const widthClass = fullWidth ? 'w-100' : ''
+
   return `
-    <a
-      href="https://www.lchaimfoodbank.co.uk/donate/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="donate-button btn btn-success"
+    <button
+      type="button"
+      data-bs-toggle="modal"
+      data-bs-target="#charityModal"
+      class="donate-button btn btn-success ${sizeClass} ${widthClass}"
     >
-      Donate this meal
-    </a>
+      <i class="bi bi-heart-fill"></i>
+      ${text}
+    </button>
   `
 }
 

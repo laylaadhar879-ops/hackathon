@@ -357,3 +357,8 @@ font-family: "Source Serif 4", serif
 ![recipe details](public/hackathon-wireframe-recipe.webp)
 
 ![contact form page](public/hackathon-wireframe-contactpage.webp)
+
+# lighthouse performance
+
+![lighthouse performance for desktop](public/lighthouse-performance.png)
+

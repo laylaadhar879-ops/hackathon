@@ -28,6 +28,7 @@ The application currently has four pages:
 4. **Contact** (`/contact.html`) - Contact form with validation
    - Files: `contact.html`, `src/pages/contact/contact.js`, `src/pages/contact/style.css`
    - Uses Zod for form validation
+   - messages sent to pageclip (this is fine for our mvp)
 
 ## Current Components
 
@@ -92,12 +93,12 @@ The system estimates meal costs and automatically displays them in your local cu
 
 #### 3. Charity Selection
 When you click "Donate this meal":
-- A modal opens showing 6 GlobalGiving food security projects
+- A modal opens showing 10 GlobalGiving food security projects
 - The modal displays: "You're viewing **[Recipe Name]**, which costs approximately **$X** to make" (in your currency)
-- All charities show donation buttons with the calculated meal value (e.g., "Donate $9" for US users, "Donate €8" for EU users)
+- Load more button to add 10 more charities
 
 #### 4. Donation Flow
-When you click a charity's "Donate $X" button (amount shown in your currency):
+When you click a charity, the donate button is enabled (amount shown in your currency):
 1. **Direct to Cart**: The link uses GlobalGiving's cart URL format for immediate checkout:
    ```
    https://www.globalgiving.org/dy/cart/view/gg.html?cmd=addItem&projid=X&frequency=ONCE&amount=Y
@@ -144,11 +145,11 @@ src/
 2. **Recipe loads**: Category is "Pasta"
 3. **Calculation**:
    - Base value: €8 (EUR)
-   - Converted: $9 (USD) using rate 1.1
+   - Converted: $9 (USD) using rate 1.1 (good enough for our mvp)
 4. **User clicks**: "Donate this meal" button
 5. **Modal shows**:
    - "You're viewing Spicy Arrabiata Penne, which costs approximately **$9** to make"
-   - 6 charity cards, each with "Donate $9" button
+   - 10 charity cards
 6. **User selects**: A charity (e.g., "Micro-farming among the poor Cape Town")
 7. **Redirects to**: `https://www.globalgiving.org/dy/cart/view/gg.html?cmd=addItem&projid=714&frequency=ONCE&amount=9`
 8. **GlobalGiving page**: Shows donation form with $9 pre-filled + optional tip
@@ -273,25 +274,6 @@ src/pages/ContactPage/
 ├── index.js
 └── ContactPage.css
 ```
-## Documentation and Spikes
-
-### What is a Spike?
-
-A **spike** is a time-boxed research task where you investigate a question or explore how to implement something. It helps you learn before you code.
-
-**Examples**:
-- "Which recipe API should we use?"
-- "How do we upload images?"
-- "Can we add user authentication?"
-
-### Creating Documentation
-
-The `docs/` folder is for all project documentation:
-
-- **Spikes**: Research documents (`docs/spikes/`)
-- **Technical decisions**: Why you chose an approach
-- **Setup guides**: Special instructions
-- **API documentation**: How your code work?
 
 ## Project Structure
 

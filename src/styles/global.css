@@ -120,6 +120,43 @@ footer {
 }
 
 /* =========================
+   DEVELOPER CARDS
+   ========================= */
+.dev-cards {
+    display: grid;
+    gap: 1rem;
+}
+
+.dev-card {
+    padding-top: 1rem;
+}
+
+.dev-card-content {
+    border: 2px solid var(--forest-green);
+    padding: 2rem 1.5rem;
+    min-height: 20rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dev-card-content:hover {
+    border-color: var(--antique-gold);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+/* Responsive display of developer cards on tablets and larger screens */
+@media screen and (min-width:786px) {
+    .dev-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================
    CONTACT PAGE
    ========================= */
 #main-contact {

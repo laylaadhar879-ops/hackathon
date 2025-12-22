@@ -337,4 +337,17 @@ hackathon/
    - Page-specific styles imported in JavaScript files
 6. **Static Navbar**: Navbar HTML is included directly in each page (not inserted via JavaScript) to prevent flash on load
 
+# color pallete and fonts 
+
+color pallets used include:
+  burgundy: #800020;
+  forest-green: #2F4F4F;
+  antique-gold: #D4AF37;
+  warm-cream: #F5F5DC;
+
+fonts used inlude:
+font-family: 'Great Vibes', cursive
+font-family: "Source Serif 4", serif
+
+
 

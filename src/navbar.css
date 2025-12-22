@@ -1,0 +1,21 @@
+:root {
+  --primary-color: #800020;
+  --secondary-color: white;
+  --highlight-color: #9DC183;
+}
+
+.navbar {
+    background-color: var(--primary-color)!important;
+}
+
+.navbar .nav-link {
+    color: var(--secondary-color)!important;
+}
+
+.navbar .nav-link:hover {
+    color: var(--highlight-color)!important;
+}
+
+.navbar .navbar-brand {
+    color: var(--secondary-color)!important;
+}

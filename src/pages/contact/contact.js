@@ -1,4 +1,5 @@
 import './style.css'
+import './navbar.css'
 import { z } from 'zod'
 
 const contactSchema = z.object({

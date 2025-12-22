@@ -18,17 +18,10 @@
     z-index: 100;
 }
 
-<<<<<<< HEAD
-.navbar-link, .nav-link {
-    color: var(--secondary-color)!important;
-    margin-right: 1rem;
-    font-weight: 800;
-=======
 .navbar-link {
     color: var(--secondary-color)!important;
     margin-right: 1rem;
     font-weight: 700;
->>>>>>> 930703f (Add and style navbar or desktop and other screen sizes)
     font-size: large;
 }
 
@@ -45,10 +38,7 @@
 .navbar-toggler {
     border: none;
     background: transparent;
-<<<<<<< HEAD
-=======
     color: var(--secondary-color);
->>>>>>> 930703f (Add and style navbar or desktop and other screen sizes)
     font-size: 1.5rem;
     padding: 0.5rem;
 }
@@ -56,17 +46,9 @@
 .navbar-toggler:focus {
     outline: none;
 }
-<<<<<<< HEAD
-.navbar-collapse {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1rem;
-=======
 
 .navbar-toggler:active {
     outline: 4px auto -webkit-focus-ring-color;
->>>>>>> 930703f (Add and style navbar or desktop and other screen sizes)
 }
 
 @media (max-width: 768px) {

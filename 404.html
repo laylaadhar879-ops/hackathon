@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/main.css">
+    <title>404 - Page Not Found | Recipe App</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Recipe App</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/recipes.html">Recipes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <h1 class="display-1 fw-bold text-danger">404</h1>
+          <h2 class="mb-4">Page Not Found</h2>
+          <p class="lead mb-4">
+            Sorry, we couldn't find the page you're looking for.
+            The recipe you're searching for might have been moved or doesn't exist.
+          </p>
+
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="/" class="btn btn-primary btn-lg">
+              <i class="bi bi-house-door"></i> Go Home
+            </a>
+            <a href="/recipes.html" class="btn btn-outline-primary btn-lg">
+              <i class="bi bi-book"></i> Browse Recipes
+            </a>
+          </div>
+
+          <div class="mt-5">
+            <p class="text-muted">
+              If you believe this is an error, please
+              <a href="/contact.html" class="text-decoration-none">contact us</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/pages/404/404.js"></script>
+  </body>
+</html>

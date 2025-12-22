@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/main.css">
+    <title>Error | Recipe App</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Recipe App</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/recipes.html">Recipes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact.html">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <div class="alert alert-danger" role="alert">
+            <h1 class="display-4 mb-3">Oops! Something Went Wrong</h1>
+          </div>
+
+          <div id="error-message" class="mb-4">
+            <p class="lead">
+              We encountered an unexpected error while processing your request.
+            </p>
+          </div>
+
+          <div id="error-details" class="alert alert-light text-start mb-4" style="display: none;">
+            <h5>Error Details:</h5>
+            <p id="error-details-text" class="mb-0 font-monospace small"></p>
+          </div>
+
+          <div class="d-flex gap-3 justify-content-center flex-wrap mb-4">
+            <button onclick="history.back()" class="btn btn-secondary btn-lg">
+              <i class="bi bi-arrow-left"></i> Go Back
+            </button>
+            <a href="/" class="btn btn-primary btn-lg">
+              <i class="bi bi-house-door"></i> Go Home
+            </a>
+            <a href="/recipes.html" class="btn btn-outline-primary btn-lg">
+              <i class="bi bi-book"></i> Browse Recipes
+            </a>
+          </div>
+
+          <div class="mt-4">
+            <h5>What can you do?</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">Try refreshing the page</li>
+              <li class="mb-2">Check your internet connection</li>
+              <li class="mb-2">Return to the home page and try again</li>
+              <li class="mb-2">
+                If the problem persists,
+                <a href="/contact.html" class="text-decoration-none">contact us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/pages/error/error.js"></script>
+  </body>
+</html>

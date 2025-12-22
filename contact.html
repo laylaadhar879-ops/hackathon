@@ -45,14 +45,16 @@
           </div>
           <!-- Contact Form -->
           <div class="card col-12 col-md-8 col-lg-7 mt-4 px-0 bg-light">
-            <form action="#" class="p-4">
+            <form id="contactForm" action="https://send.pageclip.co/GAVsB8wSZedopsbpaTpWQHQeMcrmpG1E" class="pageclip-form p-4" method="post">
               <div class="mb-4">
                 <label for="name">Name</label>
-                <input id="name" class="form-control mt-2" type="text" placeholder="Enter your name" required>
+                <input id="name" name="name" class="form-control mt-2" type="text" placeholder="Enter your name" required>
+                <span id="name-error" class="text-danger small"></span>
               </div>
               <div class="mb-4">
                 <label for="email">Email Address</label>
                 <input class="form-control mt-2" type="email" name="email" id="email" placeholder="Enter your email" required>
+                <span id="email-error" class="text-danger small"></span>
                 <span class="form-text">We'll never share your email with anyone else.</span>
               </div>
               <div class="mb-4">
@@ -62,8 +64,11 @@
               <div class="mb-4">
                 <label for="message">Message</label>
                 <textarea class="form-control mt-2" rows="7" name="message" id="message" placeholder="Your message..." required></textarea>
+                <span id="message-error" class="text-danger small"></span>
               </div>
-              <button type="submit" class="btn btn-submit mb-4">Send Message</button>
+              <button type="submit" class="btn btn-submit pageclip-form__submit mb-4">
+                <span>Send Message</span>
+              </button>
             </form>
           </div>
         </div>

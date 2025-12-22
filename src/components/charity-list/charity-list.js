@@ -3,18 +3,23 @@
  * Displays a modal with multiple GlobalGiving projects for user to choose from
  */
 
-import { getDonationUrl } from '../../services/globalgiving.js';
+import * as bootstrap from 'bootstrap';
+import { getDonationUrl, getFoodCharityProjects } from '../../services/globalgiving.js';
 import { formatCurrencyFromLocation } from '../../services/currency.js';
 
 /**
  * Create a charity selection modal HTML
- * @param {Array} projects - Array of GlobalGiving project data
+ * @param {Object} charityData - Object containing projects array, totalFound, and currentStart
  * @param {Object} userLocation - User's location info
  * @param {Object} recipe - Recipe object from MealDB API
  * @param {number} mealValue - Estimated cost of the meal in EUR
  * @returns {string} HTML string for the charity modal
  */
-export function createCharityModal(projects, userLocation, recipe = null, mealValue = 20) {
+export function createCharityModal(charityData, userLocation, recipe = null, mealValue = 20) {
+  const projects = charityData?.projects || [];
+  const totalFound = charityData?.totalFound || 0;
+  const currentStart = charityData?.currentStart || 0;
+
   if (!projects || projects.length === 0) {
     return `
       <!-- Charity Selection Modal -->
@@ -49,9 +54,18 @@ export function createCharityModal(projects, userLocation, recipe = null, mealVa
     ? `You're viewing <strong>${recipeName}</strong>, which costs approximately <strong>${formattedAmount}</strong> to make.`
     : ``;
 
+  // Calculate next start position and check if there are more results
+  const nextStart = currentStart + projects.length;
+  const hasMore = nextStart < totalFound;
+  const loadMoreDisplay = hasMore ? '' : 'style="display: none;"';
+
   return `
     <!-- Charity Selection Modal -->
-    <div class="modal fade charity-modal" id="charityModal" tabindex="-1" aria-labelledby="charityModalLabel" aria-hidden="true">
+    <div class="modal fade charity-modal" id="charityModal" tabindex="-1" aria-labelledby="charityModalLabel" aria-hidden="true"
+         data-next-start="${nextStart}"
+         data-total-found="${totalFound}"
+         data-country-code="${userLocation?.countryCode || ''}"
+         data-meal-value="${mealValue}">
       <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
@@ -66,7 +80,7 @@ export function createCharityModal(projects, userLocation, recipe = null, mealVa
               Select a food/hunger charity to donate <strong>${formattedAmount}</strong> to. These projects are fighting hunger and food insecurity around the world.
               Your contribution makes a real difference!
             </p>
-            <div class="row g-3">
+            <div class="row g-3" id="charityProjectsContainer">
               ${projectCards}
             </div>
           </div>
@@ -74,6 +88,14 @@ export function createCharityModal(projects, userLocation, recipe = null, mealVa
             <small class="text-muted me-auto">
               Powered by <a href="https://www.globalgiving.org" target="_blank" rel="noopener noreferrer">GlobalGiving</a>
             </small>
+            <button type="button" class="btn btn-primary" id="loadMoreCharities" ${loadMoreDisplay}>
+              <span class="load-more-text">Load More</span>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-success" id="donateToSelectedCharity" disabled>
+              <i class="bi bi-gift-fill"></i>
+              Donate
+            </button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
@@ -95,6 +117,7 @@ function createProjectCard(project, userLocation, mealValue = 20) {
     title,
     summary,
     organization = {},
+    image = {},
     imageLink = '',
     country = '',
     goal = 0,
@@ -103,13 +126,16 @@ function createProjectCard(project, userLocation, mealValue = 20) {
     _sourceCountry = '',
   } = project;
 
-  const donationUrl = getDonationUrl(id, mealValue);
-  const formattedAmount = formatCurrencyFromLocation(mealValue, userLocation);
   const progressPercentage = goal > 0 ? Math.round((funding / goal) * 100) : 0;
   const location = country || _sourceCountry || 'Unknown';
 
-  // Simple badge showing it's a hunger/food security project
-  const themeBadge = `<span class="badge bg-success"><i class="bi bi-heart-fill"></i> Food Security</span>`;
+  // Try to get a better quality image from the image object
+  let projectImage = imageLink;
+  if (image && image.imagelink && Array.isArray(image.imagelink)) {
+    // Use original size for best quality
+    const originalImage = image.imagelink.find(link => link.size === 'original');
+    projectImage = originalImage?.url || imageLink;
+  }
 
   // Truncate summary to 150 characters
   const truncatedSummary = summary && summary.length > 150
@@ -118,14 +144,17 @@ function createProjectCard(project, userLocation, mealValue = 20) {
 
   return `
     <div class="col-md-6 col-lg-4">
-      <div class="card charity-project-card h-100 shadow-sm">
-        ${imageLink ? `
-          <img src="${imageLink}" class="card-img-top charity-project-image" alt="${title}">
+      <div class="card charity-project-card h-100 shadow-sm"
+           data-project-id="${id}"
+           style="cursor: pointer; transition: all 0.2s;"
+           role="button"
+           tabindex="0"
+           onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 0.5rem 1rem rgba(0,0,0,0.15)';"
+           onmouseleave="if(!this.classList.contains('selected')) { this.style.transform=''; this.style.boxShadow=''; }">
+        ${projectImage ? `
+          <img src="${projectImage}" class="card-img-top charity-project-image" alt="${title}" style="height: 200px; object-fit: cover;">
         ` : ''}
         <div class="card-body d-flex flex-column">
-          <div class="mb-2">
-            ${themeBadge}
-          </div>
           <h6 class="card-title charity-project-title">${title}</h6>
           <p class="text-muted mb-2">
             <small>
@@ -137,7 +166,7 @@ function createProjectCard(project, userLocation, mealValue = 20) {
           <p class="card-text charity-project-summary flex-grow-1">${truncatedSummary}</p>
 
           ${goal > 0 ? `
-            <div class="mb-3">
+            <div class="mb-2">
               <div class="progress" style="height: 6px;">
                 <div
                   class="progress-bar bg-success"
@@ -154,18 +183,171 @@ function createProjectCard(project, userLocation, mealValue = 20) {
               </div>
             </div>
           ` : ''}
-
-          <a
-            href="${donationUrl}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-success w-100 mt-auto"
-          >
-            <i class="bi bi-gift-fill"></i>
-            Donate ${formattedAmount}
-          </a>
         </div>
       </div>
     </div>
   `;
+}
+
+/**
+ * Setup pagination and card selection for the charity modal
+ * Call this after the modal HTML is inserted into the DOM
+ * @param {Object} userLocation - User's location info for currency formatting
+ */
+export function setupCharityPagination(userLocation) {
+  const modal = document.getElementById('charityModal');
+  const loadMoreBtn = document.getElementById('loadMoreCharities');
+  const donateBtn = document.getElementById('donateToSelectedCharity');
+  const container = document.getElementById('charityProjectsContainer');
+
+  if (!modal || !loadMoreBtn || !container || !donateBtn) {
+    return;
+  }
+
+  let selectedProjectId = null;
+  let selectedProjectTitle = '';
+
+  // Handle card selection
+  const handleCardClick = (event) => {
+    const card = event.target.closest('.charity-project-card');
+    if (!card) return;
+
+    const projectId = card.dataset.projectId;
+
+    // Remove selection from all cards
+    container.querySelectorAll('.charity-project-card').forEach(c => {
+      c.style.border = '';
+      c.style.backgroundColor = '';
+      c.style.transform = '';
+      c.style.boxShadow = '';
+      c.classList.remove('selected');
+    });
+
+    // Select this card
+    card.style.border = '3px solid #198754';
+    card.style.backgroundColor = '#f8f9fa';
+    card.style.transform = 'translateY(-4px)';
+    card.style.boxShadow = '0 0.5rem 1rem rgba(0,0,0,0.15)';
+    card.classList.add('selected');
+
+    selectedProjectId = projectId;
+    selectedProjectTitle = card.querySelector('.charity-project-title').textContent;
+
+    // Enable donate button
+    donateBtn.disabled = false;
+  };
+
+  // Add click handler to existing cards
+  container.addEventListener('click', handleCardClick);
+
+  // Handle donate button click
+  donateBtn.addEventListener('click', () => {
+    if (!selectedProjectId) return;
+
+    const mealValue = parseFloat(modal.dataset.mealValue);
+    const donationUrl = getDonationUrl(selectedProjectId, mealValue);
+    window.open(donationUrl, '_blank', 'noopener,noreferrer');
+
+    // Reset modal state
+    resetModalState();
+
+    // Close the modal
+    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+    if (bootstrapModal) {
+      bootstrapModal.hide();
+    }
+  });
+
+  // Function to reset modal state
+  const resetModalState = () => {
+    // Deselect all cards
+    container.querySelectorAll('.charity-project-card').forEach(c => {
+      c.style.border = '';
+      c.style.backgroundColor = '';
+      c.style.transform = '';
+      c.style.boxShadow = '';
+      c.classList.remove('selected');
+    });
+
+    // Reset selected project
+    selectedProjectId = null;
+    selectedProjectTitle = '';
+
+    // Reset donate button
+    donateBtn.disabled = true;
+
+    // Remove all cards except first 10 (reset pagination)
+    const allCards = container.querySelectorAll('.col-md-6');
+    allCards.forEach((card, index) => {
+      if (index >= 10) {
+        card.remove();
+      }
+    });
+
+    // Reset pagination state to initial values
+    const initialStart = 10; // After first 10 items
+    modal.dataset.nextStart = initialStart;
+
+    // Show Load More button if there are more items
+    const totalFound = parseInt(modal.dataset.totalFound, 10);
+    if (initialStart < totalFound) {
+      loadMoreBtn.style.display = '';
+    }
+  };
+
+  // Handle Load More button
+  loadMoreBtn.addEventListener('click', async () => {
+    const nextStart = parseInt(modal.dataset.nextStart, 10);
+    const totalFound = parseInt(modal.dataset.totalFound, 10);
+    const countryCode = modal.dataset.countryCode;
+    const mealValue = parseFloat(modal.dataset.mealValue);
+
+    // Check if there are more results
+    if (nextStart >= totalFound) {
+      loadMoreBtn.style.display = 'none';
+      return;
+    }
+
+    // Show loading state
+    const loadMoreText = loadMoreBtn.querySelector('.load-more-text');
+    const spinner = loadMoreBtn.querySelector('.spinner-border');
+    loadMoreBtn.disabled = true;
+    loadMoreText.textContent = 'Loading...';
+    spinner.classList.remove('d-none');
+
+    try {
+      // Fetch next batch of projects using offset pagination (gets 10 projects per API limit)
+      const charityData = await getFoodCharityProjects(countryCode, nextStart);
+
+      if (charityData.projects && charityData.projects.length > 0) {
+        // Create HTML for new projects
+        const newProjectCards = charityData.projects
+          .map(project => createProjectCard(project, userLocation, mealValue))
+          .join('');
+
+        // Append to container
+        container.insertAdjacentHTML('beforeend', newProjectCards);
+
+        // Update pagination data attributes
+        const newNextStart = nextStart + charityData.projects.length;
+        modal.dataset.nextStart = newNextStart;
+
+        // Hide button if no more projects
+        if (newNextStart >= totalFound) {
+          loadMoreBtn.style.display = 'none';
+        }
+      } else {
+        // No more projects
+        loadMoreBtn.style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error loading more charities:', error);
+      loadMoreText.textContent = 'Error loading more';
+    } finally {
+      // Reset button state
+      loadMoreBtn.disabled = false;
+      loadMoreText.textContent = 'Load More';
+      spinner.classList.add('d-none');
+    }
+  });
 }

@@ -1,7 +1,8 @@
 import './style.css'
 import '../../components/charity-list/charity-list.css'
+import * as bootstrap from 'bootstrap'
 import { createDonateButton } from '../../components/donate-button/donate-button.js'
-import { createCharityModal } from '../../components/charity-list/charity-list.js'
+import { createCharityModal, setupCharityPagination } from '../../components/charity-list/charity-list.js'
 import { getUserLocation } from '../../services/location.js'
 import { getFoodCharityProjects, estimateMealValue } from '../../services/globalgiving.js'
 
@@ -107,15 +108,18 @@ async function fetchRecipeDetail(id) {
       </div>
     `
 
-    // Fetch charity projects in the background
-    const charityProjects = await getFoodCharityProjects(userLocation.countryCode, 6)
+    // Fetch charity projects in the background (gets 10 projects per API limit)
+    const charityData = await getFoodCharityProjects(userLocation.countryCode, 0)
 
     // Calculate the estimated value of this meal in user's local currency
     const mealValue = estimateMealValue(recipe, userLocation)
 
     // Add the charity modal to the page with recipe and meal value
-    const modalHtml = createCharityModal(charityProjects, userLocation, recipe, mealValue)
+    const modalHtml = createCharityModal(charityData, userLocation, recipe, mealValue)
     document.body.insertAdjacentHTML('beforeend', modalHtml)
+
+    // Setup pagination for the charity modal
+    setupCharityPagination(userLocation)
 
   } catch (error) {
     console.error('Error fetching recipe:', error)

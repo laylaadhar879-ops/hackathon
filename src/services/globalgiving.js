@@ -13,23 +13,26 @@ const API_KEY = import.meta.env.VITE_GLOBALGIVING_API_KEY;
 /**
  * Fetch multiple food/hunger-related charity projects for user to choose from
  * Uses the search API which automatically filters out inactive projects
+ * Search API uses offset pagination with &start parameter
+ * Returns maximum 10 projects per request (API limit)
  * @param {string} countryCode - ISO 2-letter country code (not used in simple version)
- * @param {number} limit - Maximum number of projects to return (default: 6)
- * @returns {Promise<Array>} - Array of project data
+ * @param {number} start - Offset for pagination (default: 0)
+ * @returns {Promise<Object>} - Object containing projects array and pagination info
  */
-export async function getFoodCharityProjects(countryCode, limit = 6) {
+export async function getFoodCharityProjects(countryCode, start = 0) {
   try {
     // Use the search endpoint with theme filter
     // Note: Search API automatically returns only active projects (active = true)
     // Using q=* to get all projects that match the theme filter
-    const url = `https://api.globalgiving.org/api/public/services/search/projects?api_key=${API_KEY}&q=*&filter=theme:hunger`;
+    // API returns max 10 results per request
+    const url = `https://api.globalgiving.org/api/public/services/search/projects?api_key=${API_KEY}&q=*&filter=theme:hunger&start=${start}`;
 
     const response = await fetch(url, {
       headers: { 'Accept': 'application/json' },
     });
 
     if (!response.ok) {
-      return [];
+      return { projects: [], totalFound: 0, currentStart: start };
     }
 
     const data = await response.json();
@@ -48,15 +51,22 @@ export async function getFoodCharityProjects(countryCode, limit = 6) {
         p._sourceCountry = p.country || p.iso3166CountryCode || 'Unknown';
       });
 
-      // Return first N projects
-      return projects.slice(0, limit);
+      // Get total number of results from response
+      const totalFound = data.search.response.numberFound || 0;
+
+      // Return all projects from API (max 10) with offset-based pagination info
+      return {
+        projects: projects,
+        totalFound: totalFound,
+        currentStart: start,
+      };
     }
 
-    return [];
+    return { projects: [], totalFound: 0, currentStart: start };
 
   } catch (error) {
     console.error('Error fetching charity projects:', error);
-    return [];
+    return { projects: [], totalFound: 0, currentStart: start };
   }
 }
 

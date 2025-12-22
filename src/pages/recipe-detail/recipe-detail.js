@@ -1,7 +1,6 @@
 import './style.css'
 import '../../components/charity-list/charity-list.css'
 import * as bootstrap from 'bootstrap'
-import { createDonateButton } from '../../components/donate-button/donate-button.js'
 import { createCharityModal, setupCharityPagination } from '../../components/charity-list/charity-list.js'
 import { getUserLocation } from '../../services/location.js'
 import { getFoodCharityProjects, estimateMealValue } from '../../services/globalgiving.js'
@@ -105,7 +104,10 @@ async function fetchRecipeDetail(id) {
           <div class="border rounded p-4 bg-light position-sticky" style="top: 20px;">
             <h4 class="mb-3">Help Feed Someone</h4>
             <p class="mb-3">Your donation can provide this meal to a family in need.</p>
-            ${createDonateButton()}
+            <button type="button" id="donateModalButton" class="donate-button btn btn-success btn-lg w-100">
+              <i class="bi bi-heart-fill"></i>
+              Donate This Meal
+            </button>
             <p class="small text-muted mt-3 mb-0">
               Every donation helps us prepare and deliver meals to those who need them most.
             </p>
@@ -126,6 +128,22 @@ async function fetchRecipeDetail(id) {
 
     // Setup pagination for the charity modal
     setupCharityPagination(userLocation)
+
+    // Setup donate button to open modal after DOM has fully parsed
+    // Use requestAnimationFrame to ensure modal HTML is fully processed
+    requestAnimationFrame(() => {
+      const donateButton = document.getElementById('donateModalButton')
+      const charityModalElement = document.getElementById('charityModal')
+
+      if (donateButton && charityModalElement) {
+        // Initialize Bootstrap modal instance once, reuse it for all clicks
+        const modal = new bootstrap.Modal(charityModalElement)
+
+        donateButton.addEventListener('click', () => {
+          modal.show()
+        })
+      }
+    })
 
   } catch (error) {
     // Handle network errors vs API errors

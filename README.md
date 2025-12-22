@@ -349,5 +349,11 @@ fonts used inlude:
 font-family: 'Great Vibes', cursive
 font-family: "Source Serif 4", serif
 
+# wireframe 
+![landing page](public/hackathon-wireframe-landingpage.png)
 
+![recipe page](public/hackathon-wireframe-recipepage.webp)
 
+![recipe details](public/hackathon-wireframe-recipe.webp)
+
+![contact form page](public/hackathon-wireframe-contactpage.webp)

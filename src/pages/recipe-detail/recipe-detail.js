@@ -5,6 +5,7 @@ import { createDonateButton } from '../../components/donate-button/donate-button
 import { createCharityModal, setupCharityPagination } from '../../components/charity-list/charity-list.js'
 import { getUserLocation } from '../../services/location.js'
 import { getFoodCharityProjects, estimateMealValue } from '../../services/globalgiving.js'
+import { handleRecipeNotFound, handleAPIError, displayInlineError } from '../../utils/error-handler.js'
 
 // Get recipe ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search)
@@ -13,10 +14,7 @@ const recipeId = urlParams.get('id')
 if (recipeId) {
   fetchRecipeDetail(recipeId)
 } else {
-  document.querySelector('#recipe-detail').innerHTML = `
-    <div class="alert alert-warning">No recipe ID provided</div>
-    <a href="/recipes.html" class="btn btn-primary">Back to Recipes</a>
-  `
+  displayInlineError('recipe-detail', 'No recipe ID provided')
 }
 
 async function fetchRecipeDetail(id) {
@@ -29,11 +27,19 @@ async function fetchRecipeDetail(id) {
 
     const data = await recipeResponse.json()
 
-    if (!data.meals) {
-      throw new Error('Recipe not found')
+    // Check if recipe exists - API returns null or empty array for invalid IDs
+    if (!data.meals || data.meals.length === 0 || !data.meals[0]) {
+      handleRecipeNotFound(id)
+      return
     }
 
     const recipe = data.meals[0]
+
+    // Validate that we have the minimum required data
+    if (!recipe.strMeal || !recipe.strMealThumb) {
+      handleRecipeNotFound(id)
+      return
+    }
 
     // Extract ingredients and measurements
     const ingredients = extractIngredients(recipe)
@@ -122,11 +128,12 @@ async function fetchRecipeDetail(id) {
     setupCharityPagination(userLocation)
 
   } catch (error) {
-    console.error('Error fetching recipe:', error)
-    document.querySelector('#recipe-detail').innerHTML = `
-      <div class="alert alert-danger">Error loading recipe</div>
-      <a href="/recipes.html" class="btn btn-primary">Back to Recipes</a>
-    `
+    // Handle network errors vs API errors
+    if (error.message.includes('fetch') || error.name === 'TypeError') {
+      handleAPIError(error, 'Failed to fetch recipe data')
+    } else {
+      displayInlineError('recipe-detail', 'Error loading recipe. Please try again.')
+    }
   }
 }
 

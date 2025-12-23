@@ -10,9 +10,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
-    <title>Recipes - Merry Meals</title>
+    <title>Merry Meals - Recipes</title>
   </head>
   <body>
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Skip to main content</a>
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
         <a class="navbar-brand" href="/"> Merry Meals</a>
@@ -34,7 +35,7 @@
         </div>
       </div>
     </nav>
-    <div class="container py-5">
+    <div id="main-content" class="container py-5">
       <div class="row mb-4">
         <div class="col">
           <h1>Our Recipes</h1>
@@ -44,14 +45,17 @@
 
       <div class="row mb-4">
         <div class="col-md-4 mb-3">
+          <label for="search-input" class="visually-hidden">Search recipes</label>
           <input type="text" class="form-control" id="search-input" placeholder="Search recipes...">
         </div>
         <div class="col-md-3 mb-3">
+          <label for="category-filter" class="visually-hidden">Filter by category</label>
           <select class="form-select" id="category-filter">
             <option value="">All Categories</option>
           </select>
         </div>
         <div class="col-md-3 mb-3">
+          <label for="area-filter" class="visually-hidden">Filter by cuisine</label>
           <select class="form-select" id="area-filter">
             <option value="">All Cuisines</option>
           </select>
@@ -61,7 +65,7 @@
         </div>
       </div>
 
-      <div class="row" id="recipe-list">
+      <div class="row" id="recipe-list" aria-live="polite" aria-atomic="false">
         <div class="col-12">
           <p>Loading recipes...</p>
         </div>

@@ -1,4 +1,5 @@
 import './style.css'
+import 'bootstrap'
 
 // State management
 let allRecipes = []

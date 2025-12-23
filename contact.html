@@ -40,31 +40,32 @@
         <div class="row d-flex justify-content-center py-5">
           <!-- Contact Content -->
           <div class="col-12 col-md-8 col-lg-7 px-0 mt-5">
-            <h1>Contact Us</h1>
+            <h1 id="contact-heading">Contact Us</h1>
             <p class="lead">Have questions or suggestions? We'd love to hear from you!</p>
           </div>
           <!-- Contact Form -->
           <div class="card col-12 col-md-8 col-lg-7 mt-4 px-0 bg-light">
-            <form id="contactForm" action="https://send.pageclip.co/GAVsB8wSZedopsbpaTpWQHQeMcrmpG1E" class="pageclip-form p-4" method="post">
+            <form id="contactForm" action="https://send.pageclip.co/GAVsB8wSZedopsbpaTpWQHQeMcrmpG1E" class="pageclip-form p-4" method="post" aria-labelledby="contact-heading">
               <div class="mb-4">
                 <label for="name">Name</label>
-                <input id="name" name="name" class="form-control mt-2" type="text" placeholder="Enter your name" required>
-                <span id="name-error" class="text-danger small"></span>
+                <input id="name" name="name" class="form-control mt-2" type="text" placeholder="Enter your name" aria-describedby="name-error" required>
+                <span id="name-error" class="text-danger small" role="alert" aria-live="assertive"></span>
               </div>
               <div class="mb-4">
                 <label for="email">Email Address</label>
-                <input class="form-control mt-2" type="email" name="email" id="email" placeholder="Enter your email" required>
-                <span id="email-error" class="text-danger small"></span>
+                <input class="form-control mt-2" type="email" name="email" id="email" placeholder="Enter your email" aria-describedby="email-error" required>
+                <span id="email-error" class="text-danger small" role="alert" aria-live="assertive"></span>
                 <span class="form-text">We'll never share your email with anyone else.</span>
               </div>
               <div class="mb-4">
                 <label for="subject">Subject</label>
-                <input class="form-control mt-2" type="text" name="subject" id="subject" placeholder="What is this about?" required>
+                <input class="form-control mt-2" type="text" name="subject" id="subject" placeholder="What is this about?" aria-describedby="subject-error" required>
+                <span id="subject-error" class="text-danger small" role="alert" aria-live="assertive"></span>
               </div>
               <div class="mb-4">
                 <label for="message">Message</label>
-                <textarea class="form-control mt-2" rows="7" name="message" id="message" placeholder="Your message..." required></textarea>
-                <span id="message-error" class="text-danger small"></span>
+                <textarea class="form-control mt-2" rows="7" name="message" id="message" placeholder="Your message..." aria-describedby="message-error" required></textarea>
+                <span id="message-error" class="text-danger small" role="alert" aria-live="assertive"></span>
               </div>
               <button type="submit" class="btn btn-success btn-lg pageclip-form__submit mb-4">
                 <span>Send Message</span>

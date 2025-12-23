@@ -1,0 +1,118 @@
+/* HEADER */
+
+#header {
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh;
+    background-color: var(--complementary-color);
+}
+
+.navbar {
+    background-color: var(--secondary-color);
+}
+
+.nav-item .nav-link {
+    color: var(--complementary-color);
+}
+
+.header-info h1 {
+  font-family: "Great Vibes", cursive;
+  font-size: 3.2rem;
+}
+
+.header-info p {
+  font-family: "Source Serif 4", serif;
+}
+
+.btn-recipe {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.btn-recipe:hover {
+  background-color: transparent;
+  border-color: var(--secondary-color);
+}
+
+.btn-contact {
+  border: 1px solid var(--secondary-color);
+}
+
+.btn-contact:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+/* PROMOTION CARDS */
+
+#main {
+    background-color: var(--background-color);
+    font-family: "Source Serif 4", serif;
+    min-height: 100vh;
+}
+
+#main h1, #main h2, #main h3 {
+    font-family: "Great Vibes", cursive;
+}
+
+#main h2 {
+    font-size: 2.4rem;
+}
+
+#main .row {
+    display: grid;
+}
+
+#main .row .intro-card {
+    padding-top: 1rem;
+}
+
+#main .intro-cover {
+    border: 1px solid var(--secondary-color);
+    padding: 2rem;
+    min-height: 20rem;
+    border-radius: 5px;
+    align-content: center;
+}
+
+#main .card-content {
+    padding-top: 2rem;
+}
+
+#main .card-content i {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    transition: opacity .4s;
+}
+
+#main .card-content i:hover {
+    opacity: 0.5;
+}
+
+/* Responsive display of promotion cards on tablets and larger screen */
+@media screen and (min-width:786px) {
+    #main .row  {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* CONTACT */
+
+#main-contact {
+    background-color: var(--background-color);
+    font-family: "Source Serif 4", serif;
+}
+
+#main-contact h1 {
+    font-family: "Great Vibes", cursive;
+    font-size: 3.2rem;
+}
+
+.btn-submit {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.btn-submit:hover {
+    border: 1px solid var(--secondary-color);
+}

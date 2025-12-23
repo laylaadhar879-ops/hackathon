@@ -105,7 +105,7 @@ async function fetchRecipeDetail(id) {
           <div class="border rounded p-4 bg-light position-sticky" style="top: 20px;">
             <h4 class="mb-3">Help Feed Someone</h4>
             <p class="mb-3">Your donation can provide this meal to a family in need.</p>
-            <button type="button" id="donateModalButton" class="donate-button btn btn-success btn-lg w-100">
+            <button type="button" id="donateModalButton" class="donate-button btn btn-success w-100">
               <i class="bi bi-heart-fill"></i>
               Donate This Meal
             </button>

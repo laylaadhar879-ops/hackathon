@@ -34,7 +34,7 @@
   width: 2em;
   margin-right: 0.5em;
   font-weight: bold;
-  color: #198754;
+  color: var(--forest-green);
 }
 
 /* Donate button styling */

@@ -158,6 +158,53 @@ footer {
 }
 
 /* =========================
+   BUTTON ACCESSIBILITY OVERRIDES
+   ========================= */
+/* Improve contrast for outline-success button on warm cream background */
+.btn-outline-success {
+    --bs-btn-color: var(--forest-green-dark);
+    --bs-btn-border-color: var(--forest-green-dark);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--forest-green-dark);
+    --bs-btn-hover-border-color: var(--forest-green-dark);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--forest-green-dark);
+    --bs-btn-active-border-color: var(--forest-green-dark);
+    --bs-btn-disabled-color: var(--forest-green-dark);
+    --bs-btn-disabled-border-color: var(--forest-green-dark);
+}
+
+/* =========================
+   FOCUS STYLES FOR ACCESSIBILITY
+   ========================= */
+/* Enhanced focus indicators for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+    outline: 3px solid var(--antique-gold);
+    outline-offset: 2px;
+}
+
+/* Skip link styles */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--forest-green-dark);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* =========================
    CONTACT PAGE
    ========================= */
 #main-contact {

@@ -240,6 +240,14 @@ export function setupCharityPagination(userLocation) {
   // Add click handler to existing cards
   container.addEventListener('click', handleCardClick);
 
+  // Add keyboard handler for accessibility
+  container.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleCardClick(event);
+    }
+  });
+
   // Handle donate button click
   donateBtn.addEventListener('click', () => {
     if (!selectedProjectId) return;

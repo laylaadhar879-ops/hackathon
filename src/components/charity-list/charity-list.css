@@ -3,7 +3,7 @@
  */
 
 .charity-list-header h4 {
-  color: var(--primary-color, #C41E3A);
+  color: var(--burgundy);
   font-weight: 600;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .charity-project-card:hover {
-  border-color: var(--secondary-color, #2C5F2D);
+  border-color: var(--forest-green);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
 }
@@ -25,7 +25,7 @@
 
 .charity-project-title {
   font-weight: 600;
-  color: var(--primary-color, #C41E3A);
+  color: var(--burgundy);
   font-size: 0.95rem;
   min-height: 2.5rem;
 }
@@ -37,15 +37,15 @@
 }
 
 .charity-project-card .btn-success {
-  background-color: var(--secondary-color, #2C5F2D);
-  border-color: var(--secondary-color, #2C5F2D);
+  background-color: var(--forest-green);
+  border-color: var(--forest-green);
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .charity-project-card .btn-success:hover {
-  background-color: #1f4320;
-  border-color: #1f4320;
+  background-color: var(--forest-green-dark);
+  border-color: var(--forest-green-dark);
   transform: scale(1.02);
 }
 
@@ -56,7 +56,7 @@
 
 /* Modal specific styles */
 .charity-modal .modal-header {
-  background-color: var(--secondary-color, #2C5F2D);
+  background-color: var(--forest-green);
   color: white;
 }
 

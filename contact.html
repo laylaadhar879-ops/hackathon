@@ -2,12 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/src/main.css">
     <link rel="stylesheet" href="/src/navbar.css">
     <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
     <title>Contact - Merry Meals</title>
   </head>
   <body>
@@ -67,7 +70,7 @@
                 <textarea class="form-control mt-2" rows="7" name="message" id="message" placeholder="Your message..." aria-describedby="message-error" required></textarea>
                 <span id="message-error" class="text-danger small" role="alert" aria-live="assertive"></span>
               </div>
-              <button type="submit" class="btn btn-success btn-lg pageclip-form__submit mb-4">
+              <button type="submit" class="btn btn-success pageclip-form__submit mb-4">
                 <span>Send Message</span>
               </button>
             </form>
@@ -76,7 +79,7 @@
       </div>
     </main>
 
-    <script type="module" src="/src/pages/contact/contact.js"></script>
     <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
+    <script type="module" src="/src/pages/contact/contact.js"></script>
   </body>
 </html>

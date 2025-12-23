@@ -4,11 +4,11 @@
 
 .charity-card {
   margin: 2rem 0;
-  border: 2px solid var(--secondary-color, #2C5F2D);
+  border: 2px solid var(--forest-green);
 }
 
 .charity-card .card-header {
-  background-color: var(--secondary-color, #2C5F2D) !important;
+  background-color: var(--forest-green) !important;
 }
 
 .charity-card .card-header h5 {
@@ -28,7 +28,7 @@
 
 .charity-title {
   font-weight: 600;
-  color: var(--primary-color, #C41E3A);
+  color: var(--burgundy);
   margin-bottom: 0.5rem;
   font-size: 1rem;
 }
@@ -44,15 +44,15 @@
 }
 
 .charity-card .btn-success {
-  background-color: var(--secondary-color, #2C5F2D);
-  border-color: var(--secondary-color, #2C5F2D);
+  background-color: var(--forest-green);
+  border-color: var(--forest-green);
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .charity-card .btn-success:hover {
-  background-color: #1f4320;
-  border-color: #1f4320;
+  background-color: var(--forest-green-dark);
+  border-color: var(--forest-green-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }

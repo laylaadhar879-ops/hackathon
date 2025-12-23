@@ -88,7 +88,7 @@ export function createCharityModal(charityData, userLocation, recipe = null, mea
             <small class="text-muted me-auto">
               Powered by <a href="https://www.globalgiving.org" target="_blank" rel="noopener noreferrer">GlobalGiving</a>
             </small>
-            <button type="button" class="btn btn-primary" id="loadMoreCharities" ${loadMoreDisplay}>
+            <button type="button" class="btn btn-outline-success" id="loadMoreCharities" ${loadMoreDisplay}>
               <span class="load-more-text">Load More</span>
               <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
             </button>
@@ -96,7 +96,7 @@ export function createCharityModal(charityData, userLocation, recipe = null, mea
               <i class="bi bi-gift-fill"></i>
               Donate
             </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

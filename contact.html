@@ -37,14 +37,14 @@
     </header>
     <main id="main-contact">
       <div class="container">
-        <div class="row d-flex justify-content-center py-5">
+        <div class="row d-flex flex-column align-items-center p-2">
           <!-- Contact Content -->
-          <div class="col-12 col-md-8 col-lg-7 px-0 mt-5">
+          <div class="col-12 col-md-8 col-lg-7 px-0 mt-3">
             <h1>Contact Us</h1>
             <p class="lead">Have questions or suggestions? We'd love to hear from you!</p>
           </div>
           <!-- Contact Form -->
-          <div class="card col-12 col-md-8 col-lg-7 mt-4 px-0 bg-light">
+          <div class="card col-12 col-md-8 col-lg-7 mt-2 px-0 bg-light">
             <form id="contactForm" action="https://send.pageclip.co/GAVsB8wSZedopsbpaTpWQHQeMcrmpG1E" class="pageclip-form p-4" method="post">
               <div class="mb-4">
                 <label for="name">Name</label>
@@ -63,10 +63,10 @@
               </div>
               <div class="mb-4">
                 <label for="message">Message</label>
-                <textarea class="form-control mt-2" rows="7" name="message" id="message" placeholder="Your message..." required></textarea>
+                <textarea class="form-control mt-2" rows="5" name="message" id="message" placeholder="Your message..." required></textarea>
                 <span id="message-error" class="text-danger small"></span>
               </div>
-              <button type="submit" class="btn btn-success btn-lg pageclip-form__submit mb-4">
+              <button type="submit" class="btn btn-success btn-lg pageclip-form__submit mb-1">
                 <span>Send Message</span>
               </button>
             </form>
@@ -74,6 +74,16 @@
         </div>
       </div>
     </main>
+
+    <footer class="bg-light text-dark py-4 mt-5 border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col text-center">
+            <p class="mb-0 text-muted">&copy; 2025 MerryMeals. Making a difference, one meal at a time.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script type="module" src="/src/pages/contact/contact.js"></script>
     <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
